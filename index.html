@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>MyFace</title>
+</head>
+<body>
+    <div id="startpage"><h1>Herzlich willkommen zu MyFace</h1>
+        <h2>Startseite</h2>
+<p>
+    Lorem assumenda quidem error iure ex. Quis ratione voluptatem quidem
+    necessitatibus voluptate, vel hic Aspernatur fugit corrupti quod iste odit
+    ipsum Amet consequuntur voluptatibus voluptatibus quas ad illo, tempora!
+    Provident
+</p>
+
+<button id="loginButton">Login</button>
+    
+    </div>
+    <div id="loginpage"><h1>Login</h1>
+        <input type="email" id="email"><br>
+
+        <input type="PASSWORD" id="pwd">
+        <button id="login">Login</button>
+    
+    </div>
+    <div id="usersite">
+
+        <h1>Userseite</h1>
+        <h2>Meine Daten</h2>
+        <input type="email" id="emailField"><br>
+        <input type="text" id="lastname"><br>
+        <input type="text" id="firstname"><br>
+        <input type="date" id="birthdate"><br>
+        <button id="save">Save</button>
+    
+    </div>
+    
+    <script>
+
+const getUserData = () => {
+    document.querySelector('#emailField').value = user[0].email;
+    document.querySelector('#lastname').value = user[0].lastname;
+    document.querySelector('#firstname').value = user[0].firstname;
+    let bd = user[0].birthdate.split('.');
+
+    document.querySelector('#birthdate').value = bd[2] + '-' + bd[1] + '-' + bd[0];
+}
+
+const loggedIn = () => {
+    document.querySelector('#startpage').style.display="none";
+    document.querySelector('#loginpage').style.display="none";
+    document.querySelector('#usersite').style.display="block";
+
+    getUserData();
+}
+
+const validate = (email,pwd) => {
+    return (user[0].password === pwd)?true:false;
+}
+
+(function() {
+    document.querySelector('#startpage').style.display="block";
+    document.querySelector('#loginpage').style.display="none";
+    document.querySelector('#usersite').style.display="none";
+
+    /** Eventlistener **/
+    document.querySelector('#loginButton').addEventListener('click', function(){
+        document.querySelector('#loginpage').style.display="block";
+        document.querySelector('#startpage').style.display="none";
+    });
+
+    document.querySelector('#login').addEventListener('click', function(){
+        let email = document.querySelector('#email').value;
+        let pwd = document.querySelector('#pwd').value;
+        if(validate(email, pwd)) loggedIn();
+    });
+
+
+    /** Get user data **/
+    fetch('/users.json')
+        .then(response => {
+            return response.json();
+        })
+        .then(myJson => {
+            user = myJson;
+            console.log(user[0]);
+        });
+})();
+    </script>
+</body>
+</html>
